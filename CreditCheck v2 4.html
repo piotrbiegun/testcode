@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formularz zapytania</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<style>
+		
+        /* Dodaj trochę przestrzeni między tabelami */
+        #resultsTable, #scoringTable, #scoringTable1 {
+            margin-top: 20px;
+        }
+        /* Dodaj ikonę ładowania */
+        .loader {
+			border: 16px solid #f3f3f3;
+			border-radius: 50%;
+			border-top: 16px solid #3498db;
+			width: 120px;
+			height: 120px;
+			animation: spin 2s linear infinite;
+			display: none; /* Ikona ładowania jest ukryta na początku */
+		}
+		#loadingTime {
+			font-size: 20px;
+			margin-top: 10px;
+			display: none; /* Ikona ładowania jest ukryta na początku */
+		}
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+		#resultsTable {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        #resultsTable td, #resultsTable th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        /* Stylizacja nagłówka */
+        #resultsTable th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+		#scoringTable {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        #scoringTable td, #scoringTable th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        /* Stylizacja nagłówka */
+        #scoringTable th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+		#scoringTable1 {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        #scoringTable1 td, #scoringTable1 th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        /* Stylizacja nagłówka */
+        #scoringTable1 th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #4CAF50;
+            color: white;
+        }
+		.details {
+		  display: none;
+		}
+    </style>
+	<script>
+	function toggleDetails(id) {
+	  var element = document.getElementById(id);
+	  if (element.style.display === "none") {
+		element.style.display = "block";
+	  } else {
+		element.style.display = "none";
+	  }
+	}
+	</script>
+</head>
+
+<body>
+    <form id="myForm">
+		<label for="NIP">NIP:</label><br>
+        <input type="text" id="NIP" name="NIP"><br>
+		<label for="PESEL">PESEL (w przypadku weryfikacji JDG):</label><br>
+		<input type="text" id="PESEL" name="PESEL"><br>
+        <label for="contactEmail">Email:</label><br>
+        <input type="text" id="contactEmail" name="contactEmail"><br>
+        <label for="streetName">Nazwa ulicy:</label><br>
+        <input type="text" id="streetName" name="streetName"><br>
+        <label for="cityName">Nazwa miasta:</label><br>
+        <input type="text" id="cityName" name="cityName"><br>
+        <label for="streetNumber">Numer ulicy:</label><br>
+        <input type="text" id="streetNumber" name="streetNumber"><br>
+		<label for="streetNumber">Numer lokalu:</label><br>
+        <input type="text" id="flatNumber" name="streetNumber"><br>
+        <label for="postalCode">Kod pocztowy:</label><br>
+        <input type="text" id="postalCode" name="postalCode"><br>
+        <label for="contactPhone">Telefon:</label><br>
+        <input type="text" id="contactPhone" name="contactPhone"><br>
+        <input type="button" value="Wyślij" onclick="submitForm()">
+    </form>
+	<div class="loader" id="loader"></div>
+	<div id="loadingTime">0</div>
+
+	<script>
+	
+	</script>
+    <table id="resultsTable">
+        <tr>
+            <th>Źródło danych</th>
+            <th>Czy znaleziono informacje wymagające uwagi</th>
+        </tr>
+    </table>
+	
+	<table id="scoringTable">
+        <tr>
+            <th>Komponent scoringu</th>
+            <th>Wartość</th>
+        </tr>
+    </table>
+	<table id="scoringTable1">
+        <tr>
+            <th>Komponent scoringu</th>
+            <th>Wartość</th>
+        </tr>
+    </table>
+    <script>
+		function transformData(rejections_and_warnings, rules_dict) {
+			let tableRows = '';
+			rejections_and_warnings.forEach(item => {
+				const rule = rules_dict[item.rule_id];
+				if (rule) {
+					const istotność = `${rule.decision}(${rule.severity})`;
+					const opis = `${rule.description}`+ (item.details ? ` Dodatkowe informacje: ${item.details ? item.details : ''}`:'');
+					tableRows += `<tr><td>${istotność}</td><td>${opis}</td></tr>`;
+				}
+			});
+			return tableRows;
+		}
+		function tableAlerts(rejections_and_warnings, rules_dict, name){
+			return `
+				<button onclick="toggleDetails('${name}')">TAK - Pokaż alerty</button>
+				<div id="${name}" class="details">
+					<table>
+						<tr>
+							<th>Istotność alertu</th>
+							<th>Opis alertu</th>
+						</tr>
+						${transformData(rejections_and_warnings, rules_dict)}
+					</table>
+				</div>
+			`;
+		}
+		function tableAlerts1(connected_ent_alerts, name) {
+		return `
+			<button onclick="toggleDetails('${name}')">TAK - Pokaż alerty</button>
+			<div id="${name}" class="details">
+				<table>
+					<tr>
+						<th>Istotność alertu</th>
+						<th>Opis alertu</th>
+					</tr>
+					${connected_ent_alerts.map(item => `
+						
+							${item.nazwa}
+							${item.tabela}
+						
+					`).join(' ')}
+				</table>
+			</div>
+		`;
+	}
+
+        function submitForm() {
+			$('#resultsTable').empty();
+            $('#scoringTable').empty();
+			$('#scoringTable1').empty();
+			$('#loader').show();
+			$('#loadingTime').show();
+			let startTime = Date.now();
+			let loadingTimeElement = document.getElementById('loadingTime');
+
+			let intervalId = setInterval(() => {
+				let currentTime = Date.now();
+				let loadingTime = Math.floor((currentTime - startTime) / 1000);
+				loadingTimeElement.innerText = loadingTime + 's';
+			}, 1000);
+            var url = 'https://demo.scoring.one/api/scenario/code/remote/score?name=genericCreditCheck_v2&key=048a16c1-22cd-4a3f-a47f-f9a0ad0d6665';
+            var data = {
+                contactEmail: $('#contactEmail').val(),
+                correspondenceAddress: {
+                    streetName: $('#streetName').val(),
+                    cityName: $('#cityName').val(),
+                    streetNumber: $('#streetNumber').val(),
+                    postalCode: $('#postalCode').val()
+                },
+                NIP: $('#NIP').val(),
+                contactPhone: $('#contactPhone').val(),
+				"representatives": [
+					{
+						"applicant": true,
+						"contactEmail": "",
+						"contactPhone": "",
+						"firstName": "",
+						"idCard": "",
+						"idCardProductionDate": "",
+						"pesel": $('#PESEL').val(),
+						"surname": ""
+					}
+				]
+            };
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                success: function(response) {
+					
+					var connected_ent_alerts=[]
+					response.result.raportData.company_check.data.capital_and_personal_connections.connected_entities.forEach(item => {
+							if (item.rejections_and_warnings.length>0 && item.meta.current) connected_ent_alerts.push({"nazwa":'<tr><td colspan="2"><b>'+(item?.nazwa ?? item?.imie_nazwisko)+"</b></td></tr>","tabela":transformData(item.rejections_and_warnings,response.result.rules_dict)})
+						}
+					)
+					//console.log(connected_ent_alerts)
+					var connectentAlerts=tableAlerts1(connected_ent_alerts,'connectedAlerts')
+					//console.log(connectentAlerts)
+					
+					var rules_dict=response.result.rules_dict
+                    var representativesData = response.result.raportData.representatives_data_check.data;
+                    var companyCheckData = response.result.raportData.company_check.data;
+					var mainAdrLink=response?.result?.raportData?.company_check?.data?.company_main_address?.google_street_image?.url_static
+					var corrAdrLink=response?.result?.raportData?.company_check?.data?.company_corr_address?.google_street_image?.url_static
+					var mainAdrLink_g=response?.result?.raportData?.company_check?.data?.company_main_address?.google_street_image?.url
+					var corrAdrLink_g=response?.result?.raportData?.company_check?.data?.company_corr_address?.google_street_image?.url
+					
+					let allRejectionsAndWarnings = [];
+					
+					representativesData.forEach(rep => {
+						if (rep.KRZ.OF.rejections_and_warnings.length > 0) {
+							allRejectionsAndWarnings = allRejectionsAndWarnings.concat(rep.KRZ.OF.rejections_and_warnings);
+						}
+						if (rep.KRZ.JDG.rejections_and_warnings.length > 0) {
+							allRejectionsAndWarnings = allRejectionsAndWarnings.concat(rep.KRZ.JDG.rejections_and_warnings);
+						}
+						if (rep.sanction_lists.rejections_and_warnings.length > 0) {
+							allRejectionsAndWarnings = allRejectionsAndWarnings.concat(rep.sanction_lists.rejections_and_warnings);
+						}
+					});
+                    var representativesRow = '<tr><td>Weryfikacja reprezentantów</td><td>' + (representativesData.some(rep => rep.KRZ.OF.rejections_and_warnings.length>0 || rep.KRZ.JDG.rejections_and_warnings.length>0 || rep.sanction_lists.rejections_and_warnings.length>0) ? tableAlerts(allRejectionsAndWarnings,rules_dict,'repr') : 'NIE') + '</td></tr>';
+                    var KRZRow = '<tr><td>Weryfikacja w KRZ</td><td>' + (companyCheckData.KRZ.rejections_and_warnings.length > 0 ? tableAlerts(companyCheckData.KRZ.rejections_and_warnings,rules_dict,'KRZ') : 'NIE') + '</td></tr>';
+					var KRSRow = '<tr><td>Weryfikacja w KRS</td><td>' + (companyCheckData?.KRS?.rejections_and_warnings.length > 0 ? tableAlerts(companyCheckData.KRS.rejections_and_warnings,rules_dict,'KRS') : 'NIE') + '</td></tr>';
+					var RARRow = '<tr><td>Weryfikacja w RAR</td><td>' + (companyCheckData?.RAR?.rejections_and_warnings.length > 0 ? tableAlerts(companyCheckData.RAR.rejections_and_warnings,rules_dict,'RAR') : 'NIE') + '</td></tr>';
+					var SUDOPRow = '<tr><td>Weryfikacja w SUDOP</td><td>' + (companyCheckData.SUDOP.rejections_and_warnings.length > 0 ? tableAlerts(companyCheckData.SUDOP.rejections_and_warnings,rules_dict,'SUDOP') : 'NIE') + '</td></tr>';
+					var BLVATRow = '<tr><td>Weryfikacja w rejestrze VAT</td><td>' + (companyCheckData.bl_vat.rejections_and_warnings.length > 0 ? tableAlerts(companyCheckData.bl_vat.rejections_and_warnings,rules_dict,'bl_vat') : 'NIE') + '</td></tr>';
+					var MainAddRow = '<tr><td>Weryfikacja adresu głównego</td><td>' + (companyCheckData.company_main_address.rejections_and_warnings.length > 0 ? tableAlerts(companyCheckData.company_main_address.rejections_and_warnings,rules_dict,'company_main_address') : 'NIE')+ (mainAdrLink===undefined ?'':'<br><a href="'+mainAdrLink_g+'" target="_blank">'+response.result.raportData.company_check.data.company_main_address.standarisationResult.pretty_address+'</a><br><img src="'+mainAdrLink+'" >' ) + '</td></tr>';
+					var CorrAddRow = '<tr><td>Weryfikacja adresu korespondencyjnego</td><td>' + (companyCheckData.company_corr_address.rejections_and_warnings.length > 0 ? tableAlerts(companyCheckData.company_corr_address.rejections_and_warnings,rules_dict,'company_corr_address') : 'NIE')+ (corrAdrLink===undefined ?'':'<br>'+response.result.raportData.company_check.data.company_corr_address.standarisationResult.pretty_address+'<br><img src="'+corrAdrLink+'" >' )  + '</td></tr>';
+					var SLRow = '<tr><td>Weryfikacja na listach sankcyjnych</td><td>' + (companyCheckData.sanction_lists.rejections_and_warnings.length > 0 ? tableAlerts(companyCheckData.sanction_lists.rejections_and_warnings,rules_dict,'sanction_lists') : 'NIE') + '</td></tr>';
+					var INTRow = '<tr><td>Weryfikacja opinii w Internecie</td><td>' + (response.result.raportData.www_check.data.rejections_and_warnings.length > 0 ? tableAlerts(response.result.raportData.www_check.data.rejections_and_warnings,rules_dict,'www_check') : 'NIE') + '</td></tr>';
+                    var connectRow='<tr><td>Analiza powiązań kapitałowo-osobowych</td><td><p><a href="'+ (response.result.raportData.graph_visualization.link)+'" target="_blank" >Analiza powiązań kapitałowo-osobowych</a></p><br>'+ connectentAlerts +'</td></tr>'
+					var DMRow = '<tr><td>Weryfikacja wpisów na giełdach wierzytelności</td><td>' + (companyCheckData.debt_markets.rejections_and_warnings.length > 0 ? tableAlerts(companyCheckData.debt_markets.rejections_and_warnings,rules_dict,'debt_markets') : 'NIE') + '</td></tr>';
+					var DATARow='<tr><td>Dane podmiotu</td><td>'+response.result.raportData.regon.data.regon_raport.dane.Dane[0].Nazwa+' ('+response.result.raportData.regon.data.regon_raport.dane.Dane[0].Szczegolna_forma_prawna+')'+'</td></tr>';
+					$('#resultsTable').append('<tr><th>Źródło danych</th><th>Czy znaleziono informacje wymagające uwagi?</th></tr>');
+					$('#resultsTable').append(DATARow);
+					$('#resultsTable').append(connectRow);
+					$('#resultsTable').append(representativesRow);
+                    $('#resultsTable').append(KRZRow);
+					$('#resultsTable').append(KRSRow);
+					$('#resultsTable').append(RARRow);
+					$('#resultsTable').append(SUDOPRow);
+					$('#resultsTable').append(BLVATRow);
+					$('#resultsTable').append(MainAddRow);
+					$('#resultsTable').append(CorrAddRow);
+					$('#resultsTable').append(SLRow);
+					$('#resultsTable').append(INTRow);
+					$('#resultsTable').append(DMRow);
+					
+					
+					var scoring=response.result.raportData.payment_credibility_score.data
+					var pdRow = '<tr><td>Prawd. defaultu</td><td>' + ((scoring.pd * 100).toFixed(2) + '%') + '</td></tr>';
+					var ratingRow = '<tr><td>Rating</td><td>' + (scoring.rating) + '</td></tr>';
+					var zdolnoscRow = '<tr><td>Zdolność płatnicza</td><td>' + (scoring.ability_to_pay) + '</td></tr>';
+					
+					$('#scoringTable').append('<tr><th>Komponent scoringu płatnościowego</th><th>Wartość</th></tr>');
+					$('#scoringTable').append(pdRow);
+					$('#scoringTable').append(ratingRow);
+					$('#scoringTable').append(zdolnoscRow);
+					
+					var scoring1=response?.result?.raportData?.company_check?.data?.KRS?.scoring
+					if (scoring1!== undefined && scoring1.status!=='No data'){
+						var pdRow1 = '<tr><td>Prawd. defaultu</td><td>' + ((scoring1.pd * 100).toFixed(2) + '%') + '</td></tr>';
+						var ratingRow1 = '<tr><td>Rating</td><td>' + (scoring1.rating) + '</td></tr>';
+						var zdolnoscRow1 = '<tr><td>Zdolność płatnicza</td><td>' + (scoring1.ability_to_pay) + '</td></tr>';
+						
+						$('#scoringTable1').append('<tr><th>Komponent scoringu finansowego</th><th>Wartość</th></tr>');
+						$('#scoringTable1').append(pdRow1);
+						$('#scoringTable1').append(ratingRow1);
+						$('#scoringTable1').append(zdolnoscRow1);
+					}else{
+						$('#scoringTable1').empty();
+					}
+					
+					$('#loader').hide();
+					$('#loadingTime').hide();
+					clearInterval(intervalId);
+					
+	
+                },
+				error: function(xhr, status, error) {
+					// Obsługa odpowiedzi innej niż HTTP 200
+					alert('Wystąpił błąd: ' + xhr.status + ' ' + xhr.statusText);
+					$('#loader').hide();
+					$('#loadingTime').hide();
+					clearInterval(intervalId);
+				}
+            });
+			
+        }
+    </script>
+</body>
+</html>

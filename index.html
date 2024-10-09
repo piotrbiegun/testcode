@@ -1,83 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="pl">
 <head>
-    <title>Algolytics API Request</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formularz Zapytania</title>
+    <style>
+        .checkbox-column {
+            display: inline-block;
+            vertical-align: top;
+            margin-right: 20px;
+        }
+        .loader {
+            display: none;
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 120px;
+            height: 120px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-    <h1>Algolytics API Request</h1>
-    <form id="apiForm" action="https://api.algolytics.pl/sb2b/v1/" method="POST">
-        <label for="nip">NIP:</label>
-        <input type="text" id="nip" name="NIP" value="9462662680" required><br><br>
+    <form id="reportForm">
+        <label for="subscriptionKey">Ocp-Apim-Subscription-Key:</label><br>
+        <input type="text" id="subscriptionKey" name="subscriptionKey" value="XXX"><br><br>
         
-        <label for="subscription_key">Ocp-Apim-Subscription-Key:</label>
-        <input type="text" id="subscription_key" name="Ocp-Apim-Subscription-Key" value="xxxxxx" required><br><br>
+        <label for="nip">NIP:</label><br>
+        <input type="text" id="nip" name="nip" value="XXX"><br><br>
         
-        <label for="reports">Requested Reports:</label><br>
-        <input type="checkbox" id="gus_regon" name="requested_reports" value="gus_regon" checked>
-        <label for="gus_regon">GUS/REGON</label><br><br>
-        <input type="checkbox" id="ceidg" name="requested_reports" value="ceidg" checked>
-        <label for="ceidg">CEIDG</label><br><br>
-        <input type="checkbox" id="dane_krs" name="requested_reports" value="dane_krs" checked>
-        <label for="dane_krs">KRS</label><br><br>
-        <input type="checkbox" id="reprezentanci" name="requested_reports" value="reprezentanci" checked>
-        <label for="reprezentanci">Reprezentaci</label><br><br>
-        <input type="checkbox" id="crbir" name="requested_reports" value="crbir" checked>
-        <label for="crbir">CRBR</label><br><br>
-        <input type="checkbox" id="biala_lista_vat" name="requested_reports" value="biala_lista_vat" checked>
-        <label for="biala_lista_vat">Status biała lista VAT</label><br><br>
-        <input type="checkbox" id="sprawozdania_fin" name="requested_reports" value="sprawozdania_fin" checked>
-        <label for="sprawozdania_fin">Sprawozdania finansowe</label><br><br>
-        <input type="checkbox" id="rar" name="requested_reports" value="rar" checked>
-        <label for="rar">Repozytorum Akt Rejestrowych (RAR)</label><br><br>
-        <input type="checkbox" id="sudop" name="requested_reports" value="sudop" checked>
-        <label for="sudop">SUDOP - dotacje</label><br><br>
-        <input type="checkbox" id="krz" name="requested_reports" value="krz" checked>
-        <label for="krz">Krajowy Rejestr Zadłuzonych (KRZ)</label><br><br>
-        <input type="checkbox" id="weryfikacja_adresu" name="requested_reports" value="weryfikacja_adresu" checked>
-        <label for="weryfikacja_adresu">Weryfikacja adresu</label><br><br>
-        <input type="checkbox" id="gieldy_wierzytelnosci" name="requested_reports" value="gieldy_wierzytelnosci" checked>
-        <label for="gieldy_wierzytelnosci">Giełdy wierzytelności</label><br><br>       
-        <input type="checkbox" id="listy_sankcyjne" name="requested_reports" value="listy_sankcyjne" checked>
-        <label for="listy_sankcyjne">Listy sankcyjne</label><br><br>
-        <input type="checkbox" id="weryfikacja_strony_www" name="requested_reports" value="weryfikacja_strony_www" checked>
-        <label for="weryfikacja_strony_www">Weryfikacja strony www</label><br><br>
-        <input type="checkbox" id="weryfikacja_w_internecie" name="requested_reports" value="weryfikacja_w_internecie" checked>
-        <label for="weryfikacja_w_internecie">Wryfikacja w internecie</label><br><br>
-        <input type="checkbox" id="powiazania" name="requested_reports" value="powiazania" checked>
-        <label for="powiazania">Powiązania</label><br><br>
-        
-        
-        <input type="submit" value="Send Request">
-    </form>
+       
+ 
+     
 
-    <h2>API Response:</h2>
-    <pre id="response"></pre>
+
+
+        <label>Requested Reports:</label><br>
+        <div class="checkbox-column">
+            <input type="checkbox" id="gus_regon" name="requested_reports" value="gus_regon" checked>
+            <label for="gus_regon">GUS/REGON</label><br><br>
+            <input type="checkbox" id="ceidg" name="requested_reports" value="ceidg" checked>
+            <label for="ceidg">CEIDG</label><br><br>
+            <input type="checkbox" id="dane_krs" name="requested_reports" value="dane_krs" checked>
+            <label for="dane_krs">KRS</label><br><br>
+            <input type="checkbox" id="biala_lista_vat" name="requested_reports" value="biala_lista_vat" checked>
+            <label for="biala_lista_vat">Status biała lista VAT</label><br><br>
+            <input type="checkbox" id="sprawozdania_fin" name="requested_reports" value="sprawozdania_fin" checked>
+            <label for="sprawozdania_fin">Sprawozdania finansowe</label><br><br>
+        </div>
+        <div class="checkbox-column">
+            <input type="checkbox" id="reprezentanci" name="requested_reports" value="reprezentanci" checked>
+            <label for="reprezentanci">Reprezentaci</label><br><br>
+            <input type="checkbox" id="crbir" name="requested_reports" value="crbir" checked>
+            <label for="crbir">CRBR</label><br><br>
+            <input type="checkbox" id="rar" name="requested_reports" value="rar" checked>
+            <label for="rar">Repozytorum Akt Rejestrowych (RAR)</label><br><br>
+            <input type="checkbox" id="sudop" name="requested_reports" value="sudop" checked>
+            <label for="sudop">SUDOP - dotacje</label><br><br>
+            <input type="checkbox" id="krz" name="requested_reports" value="krz" checked>
+            <label for="krz">Krajowy Rejestr Zadłuzonych (KRZ)</label><br><br>
+        </div>
+        <div class="checkbox-column">
+            <input type="checkbox" id="weryfikacja_adresu" name="requested_reports" value="weryfikacja_adresu" checked>
+            <label for="weryfikacja_adresu">Weryfikacja adresu</label><br><br>
+            <input type="checkbox" id="gieldy_wierzytelnosci" name="requested_reports" value="gieldy_wierzytelnosci" checked>
+            <label for="gieldy_wierzytelnosci">Giełdy wierzytelności</label><br><br>       
+            <input type="checkbox" id="listy_sankcyjne" name="requested_reports" value="listy_sankcyjne" checked>
+            <label for="listy_sankcyjne">Listy sankcyjne</label><br><br>
+            <input type="checkbox" id="weryfikacja_strony_www" name="requested_reports" value="weryfikacja_strony_www" checked>
+            <label for="weryfikacja_strony_www">Weryfikacja strony www</label><br><br>
+            <input type="checkbox" id="weryfikacja_w_internecie" name="requested_reports" value="weryfikacja_w_internecie" checked>
+            <label for="weryfikacja_w_internecie">Weryfikacja w internecie</label><br><br>
+            <input type="checkbox" id="powiazania" name="requested_reports" value="powiazania" checked>
+            <label for="powiazania">Powiązania</label><br><br>
+        </div>
+        <br>
+        <button type="button" onclick="sendRequest()">Wyślij</button>
+    </form>
+    <div class="loader" id="loader"></div>
+    <div id="response"></div>
+    <div id="timer"></div>
 
     <script>
-        document.getElementById("apiForm").addEventListener("submit", async function (event) {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            const requestBody = {
-                NIP: formData.get("NIP"),
-                requested_reports: [formData.get("requested_reports")]
+        function sendRequest() {
+            const loader = document.getElementById('loader');
+            const responseDiv = document.getElementById('response');
+            const timerDiv = document.getElementById('timer');
+            const startTime = new Date().getTime();
+
+            loader.style.display = 'block';
+            responseDiv.innerHTML = '';
+            timerDiv.innerHTML = '';
+
+            const subscriptionKey = document.getElementById('subscriptionKey').value;
+            const nip = document.getElementById('nip').value;
+            const requestedReports = Array.from(document.querySelectorAll('input[name="requested_reports"]:checked')).map(cb => cb.value);
+
+            const data = {
+                NIP: nip,
+                requested_reports: requestedReports
             };
 
-            try {
-                const response = await fetch("https://api.algolytics.pl/sb2b/v1/", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Ocp-Apim-Subscription-Key": formData.get("Ocp-Apim-Subscription-Key")
-                    },
-                    body: JSON.stringify(requestBody),
-                });
-
-                const apiResponse = await response.json();
-                document.getElementById("response").textContent = JSON.stringify(apiResponse, null, 2);
-            } catch (error) {
-                document.getElementById("response").textContent = `Error: ${error}`;
-            }
-        });
+            fetch('https://api.algolytics.pl/sb2b/v1/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache',
+                    'Ocp-Apim-Subscription-Key': subscriptionKey
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(data => {
+                loader.style.display = 'none';
+                responseDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                const endTime = new Date().getTime();
+                const timeTaken = (endTime - startTime) / 1000;
+                timerDiv.innerHTML = `Czas odpowiedzi: ${timeTaken} sekund`;
+            })
+            .catch(error => {
+                loader.style.display = 'none';
+                responseDiv.innerHTML = `Błąd: ${error}`;
+                const endTime = new Date().getTime();
+                const timeTaken = (endTime - startTime) / 1000;
+                timerDiv.innerHTML = `Czas odpowiedzi: ${timeTaken} sekund`;
+            });
+        }
     </script>
 </body>
 </html>

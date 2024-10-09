@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Algolytics API Request</title>
+</head>
+<body>
+    <h1>Algolytics API Request</h1>
+    <form id="apiForm" action="https://api.algolytics.pl/sb2b/v1/" method="POST">
+        <label for="nip">NIP:</label>
+        <input type="text" id="nip" name="NIP" value="9462662680" required><br><br>
+        
+        <label for="subscription_key">Ocp-Apim-Subscription-Key:</label>
+        <input type="text" id="subscription_key" name="Ocp-Apim-Subscription-Key" value="xxxxxx" required><br><br>
+        
+        <label for="reports">Requested Reports:</label><br>
+        <input type="checkbox" id="gus_regon" name="requested_reports" value="gus_regon" checked>
+        <label for="gus_regon">gus_regon</label><br><br>
+        
+        <input type="submit" value="Send Request">
+    </form>
+
+    <h2>API Response:</h2>
+    <pre id="response"></pre>
+
+    <script>
+        document.getElementById("apiForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const requestBody = {
+                NIP: formData.get("NIP"),
+                requested_reports: [formData.get("requested_reports")]
+            };
+
+            try {
+                const response = await fetch("https://api.algolytics.pl/sb2b/v1/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Ocp-Apim-Subscription-Key": formData.get("Ocp-Apim-Subscription-Key")
+                    },
+                    body: JSON.stringify(requestBody),
+                });
+
+                const apiResponse = await response.json();
+                document.getElementById("response").textContent = JSON.stringify(apiResponse, null, 2);
+            } catch (error) {
+                document.getElementById("response").textContent = `Error: ${error}`;
+            }
+        });
+    </script>
+</body>
+</html>

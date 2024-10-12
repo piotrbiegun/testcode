@@ -201,7 +201,7 @@
             rejectionsAndWarningsDiv.innerHTML = '';
             scoringDanePodstawoweDiv.innerHTML = '';
             raportyContentDiv.innerHTML = '';
-            jsonDiv.innerHTML = document.getElementById('jsonContent').textContent = JSON.stringify(data.result, null, 2);
+            jsonDiv.innerHTML = document.getElementById('jsonContent').textContent = JSON.stringify(data, null, 2);
 
             const danePodstawoweTable = createTable(data.dane_podstawowe);
             const rejectionsAndWarningsTable = createTable(data.rejections_and_warnings);

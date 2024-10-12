@@ -151,7 +151,7 @@
     <div id="response"></div>
     <div class="tab-buttons">
         <div class="tab-button active" data-tab="dane">Podsumowanie</div>
-        <div class="tab-button active" data-tab="daneRejestrowe">Dane rejestrowe</div>
+        <div class="tab-button" data-tab="daneRejestrowe">Dane rejestrowe</div>
         <div class="tab-button" data-tab="CRBR">CRBR</div>
         <div class="tab-button" data-tab="daneFinansowe">Dane finansowe</div>
         <div class="tab-button" data-tab="SUDOP">SUDOP</div>
@@ -378,9 +378,100 @@
             krsContentDiv.appendChild(krsContentTable);
 
 
+        
+            /*
+            <div id="SUDOP" class="tab">
+            <div id="sudopContent"></div>
+            <!-- 
+            Dane ze SUDOP
+            */
+
+            // Dane SUDOP
+            const sudopContentDiv = document.getElementById('sudopContent');
+            sudopContentDiv.innerHTML = '';
+            const sudopContentTable = createTable(data.raport_sudop);
+            console.log("Dane: ",sudopContentTable);
+            sudopContentDiv.appendChild(sudopContentTable);
+        
+            /*
+            <div id="RAR" class="tab">
+            <div id="rarContent"></div>
+            <!-- Dane ze RAR -- </div>
+            */
+
+            // Dane RAR
+            const rarContentDiv = document.getElementById('rarContent');
+            rarContentDiv.innerHTML = '';
+            const rarContentTable = createTable(data.raport_rar);
+            console.log("Dane: ",rarContentTable);
+            rarContentDiv.appendChild(rarContentTable);
+        
+            /*
+            <div id="KRZ" class="tab">
+            <div id="krzContent"></div>
+            */
+
+            // Dane KRZ
+            const krzContentDiv = document.getElementById('krzContent');
+            krzContentDiv.innerHTML = '';
+            const krzContentTable = createTable(data.raport_krz);
+            console.log("Dane: ",krzContentTable);
+            krzContentDiv.appendChild(krzContentTable);
+        
+
+
+            /*
+            <div id="weryfikacje" class="tab">
+            <div id="adresContent"></div>
+            <div id="gieldyContent"></div>
+            <div id="listyContent"></div>
+            <div id="wwwContent"></div>
+            <div id="opinieContent"></div>
+            <!-- 
+            Weryfikacja adresu
+            Giełdy wierzytelności
+            Listy sankcyjne
+            Weryfikacja strony www
+            Weryfikacja w internecie
+            */
+
+            // Weryfikacje
+            const adresContentDiv = document.getElementById('adresContent');
+            adresContentDiv.innerHTML = '';
+            const adresContentTable = createTable(data.raport_krz);
+            console.log("Dane: ",adresContentTable);
+            adresContentDiv.appendChild(adresContentTable);
+            
+            const gieldyContentDiv = document.getElementById('gieldyContent');
+            gieldyContentDiv.innerHTML = '';
+            const gieldyContentTable = createTable(data.raport_gieldy_wierzytelnosci);
+            console.log("Dane: ",gieldyContentTable);
+            gieldyContentDiv.appendChild(gieldyContentTable);
+
+            const listyContentDiv = document.getElementById('listyContent');
+            listyContentDiv.innerHTML = '';
+            const listyContentTable = createTable(data.raport_listy_sankcyjne);
+            console.log("Dane: ",listyContentTable);
+            listyContentDiv.appendChild(listyContentTable);
+
+            const wwwContentDiv = document.getElementById('wwwContent');
+            wwwContentDiv.innerHTML = '';
+            const wwwContentTable = createTable(data.raport_weryfikacja_strony_www);
+            console.log("Dane: ",wwwContentTable);
+            wwwContentDiv.appendChild(wwwContentTable);
+
+            const opinieContentDiv = document.getElementById('opinieContent');
+            opinieContentDiv.innerHTML = '';
+            const opinieContentTable = createTable(data.raport_weryfikacja_w_internecie);
+            console.log("Dane: ",opinieContentTable);
+            opinieContentDiv.appendChild(opinieContentTable);
+
+
+
+
             // Dane źródłowe
-            const jsonDiv = document.getElementById('jsonContent');
-            jsonDiv = displayJSON(data, jsonDiv);
+            //const jsonDiv = document.getElementById('jsonContent');
+            //jsonDiv = displayJSON(data, jsonDiv);
         
 
 

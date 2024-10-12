@@ -221,7 +221,12 @@
             rejectionsAndWarningsDiv.innerHTML = '';
             scoringDanePodstawoweDiv.innerHTML = '';
             raportyContentDiv.innerHTML = '';
-            jsonDiv = displayJSON(data);
+            try {
+                jsonDiv = displayJSON(data);
+            } catch (error) {
+                console.log("error :",error);
+            }
+            
 
             const danePodstawoweTable = createTable(data.dane_podstawowe);
             console.log("Dane: ",danePodstawoweTable);
@@ -272,7 +277,7 @@
                 const cell2 = row.insertCell(1);
                 cell1.textContent = key;
                 cell2.textContent = JSON.stringify(data[key]);
-                console.log(key,": ",JSON.stringify(data[key]))
+                // console.log(key,": ",JSON.stringify(data[key]))
             }
 
             table.appendChild(tbody);

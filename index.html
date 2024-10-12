@@ -231,6 +231,7 @@
                     const sectionDiv = document.createElement('div');
                     sectionDiv.innerHTML = `<h3>${section}</h3>`;
                     const sectionTable = createTable(data[section]);
+                    console.log(section,": ",sectionTable)
                     sectionDiv.appendChild(sectionTable);
                     raportyContentDiv.appendChild(sectionDiv);
                 }

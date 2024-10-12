@@ -204,8 +204,11 @@
             jsonDiv.innerHTML = document.getElementById('jsonContent').textContent = JSON.stringify(data, null, 2);
 
             const danePodstawoweTable = createTable(data.dane_podstawowe);
+            console.log("Dane: ",danePodstawoweTable);
             const rejectionsAndWarningsTable = createTable(data.rejections_and_warnings);
+            console.log("Ostrzezenia: ",rejectionsAndWarningsTable);
             const scoringDanePodstawoweTable = createTable(data.raport_dane_krs);
+            console.log("Scroing: ",scoringDanePodstawoweTable);
 
             danePodstawoweDiv.appendChild(danePodstawoweTable);
             rejectionsAndWarningsDiv.appendChild(rejectionsAndWarningsTable);

@@ -43,7 +43,7 @@
             display: none;
             border: 16px solid #f3f3f3;
             border-radius: 50%;
-            border-top: 16px solid #3498db;
+            border-top: 16px solid #ababab;
             width: 120px;
             height: 120px;
             animation: spin 2s linear infinite;
@@ -62,7 +62,7 @@
             padding: 10px;
             border: 1px solid black;
             margin-right: 5px;
-            background-color: #f2f2f2;
+            background-color: #f8f8f8;
         }
         .tab-buttons .active {
             background-color: #d2d2d2;
@@ -128,9 +128,9 @@
     <div id="timer"></div>
     <div id="response"></div>
     <div class="tab-buttons">
-        <div class="tab-button active" data-tab="dane">Dane Podstawowe i Ostrzeżenia</div>
-        <div class="tab-button" data-tab="raporty">Raporty</div>
-        <div class="tab-button" data-tab="json">JSON</div>
+        <div class="tab-button active" data-tab="dane">Dane Podstawowe i ostrzeżenia</div>
+        <div class="tab-button" data-tab="raporty">Dane szczegłówe</div>
+        <div class="tab-button" data-tab="json">JSON - dane źródłowe</div>
     </div>
     <div id="dane" class="tab active">
         <div id="danePodstawowe"></div>
@@ -143,8 +143,6 @@
     <div id="json" class="tab">
         <div id="jsonContent"></div>
     </div>
-    
-    
 
     <script type ="text/javascript">
         function sendRequest() {
@@ -181,7 +179,7 @@
                 const endTime = new Date().getTime();
                 const timeTaken = (endTime - startTime) / 1000;
                 timerDiv.innerHTML = `Czas odpowiedzi: ${timeTaken} sekund`;
-                displayResults(data.result);
+                displayResults(data);
             })
             .catch(error => {
                 loader.style.display = 'none';
@@ -192,7 +190,7 @@
             });
         }
 
-        function displayResults(result) {
+        function displayResults(data) {
             const danePodstawoweDiv = document.getElementById('danePodstawowe');
             const rejectionsAndWarningsDiv = document.getElementById('rejectionsAndWarnings');
             const scoringDanePodstawoweDiv = document.getElementById('scoringDanePodstawowe');
@@ -203,11 +201,11 @@
             rejectionsAndWarningsDiv.innerHTML = '';
             scoringDanePodstawoweDiv.innerHTML = '';
             raportyContentDiv.innerHTML = '';
-            jsonDiv.innerHTML = document.getElementById('jsonContent').textContent = JSON.stringify(data, null, 2);
+            jsonDiv.innerHTML = document.getElementById('jsonContent').textContent = JSON.stringify(data.result, null, 2);
 
-            const danePodstawoweTable = createTable(result.dane_podstawowe);
-            const rejectionsAndWarningsTable = createTable(result.rejections_and_warnings);
-            const scoringDanePodstawoweTable = createTable(result.raport_dane_krs.scoring);
+            const danePodstawoweTable = createTable(data.dane_podstawowe);
+            const rejectionsAndWarningsTable = createTable(data.rejections_and_warnings);
+            const scoringDanePodstawoweTable = createTable(data.raport_dane_krs.scoring);
 
             danePodstawoweDiv.appendChild(danePodstawoweTable);
             rejectionsAndWarningsDiv.appendChild(rejectionsAndWarningsTable);
@@ -232,7 +230,7 @@
                 if (result[section]) {
                     const sectionDiv = document.createElement('div');
                     sectionDiv.innerHTML = `<h3>${section}</h3>`;
-                    const sectionTable = createTable(result[section]);
+                    const sectionTable = createTable(data[section]);
                     sectionDiv.appendChild(sectionTable);
                     raportyContentDiv.appendChild(sectionDiv);
                 }
@@ -266,5 +264,6 @@
         });
 
     </script>
+
 </body>
 </html>

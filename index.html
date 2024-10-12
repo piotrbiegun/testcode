@@ -375,7 +375,7 @@
 
             const krsContentDiv = document.getElementById('krsContent');
             krsContentDiv.innerHTML = '';
-            const krsContentTable = createTable(data.raport_dane_KRS);
+            const krsContentTable = createTable(data.raport_dane_krs);
             console.log("Dane: ",krsContentTable);
             krsContentDiv.appendChild(krsContentTable);
 
@@ -526,10 +526,10 @@
 
             function createCollapsibleSection(key, value) {
                 const section = document.createElement('div');
-                const button = document.createElement('button');
-                button.className = 'collapsible';
-                button.textContent = key;
-                button.onclick = function() {
+                const but = document.createElement('button');
+                but.className = 'collapsible';
+                but.textContent = key;
+                but.onclick = function() {
                     this.nextElementSibling.classList.toggle('show');
                 };
 
@@ -548,7 +548,7 @@
                 jsonViewer.appendChild(section);
             }
             } catch (error) {
-                console.log("error :",error);
+                console.log("error :", error);
             }
             
         }

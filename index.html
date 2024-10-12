@@ -227,7 +227,7 @@
             ];
 
             sections.forEach(section => {
-                if (result[section]) {
+                if (data[section]) {
                     const sectionDiv = document.createElement('div');
                     sectionDiv.innerHTML = `<h3>${section}</h3>`;
                     const sectionTable = createTable(data[section]);

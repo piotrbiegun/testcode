@@ -17,6 +17,15 @@
         th {
             background-color: #f2f2f2;
         }
+        .low {
+            background-color: #d4edda;
+        }
+        .medium {
+            background-color: #fff3cd;
+        }
+        .high {
+            background-color: #f8d7da;
+        }
         .collapsible {
             cursor: pointer;
             background-color: #f2f2f2;
@@ -166,7 +175,22 @@
         <div id="reprezentacja"></div>
         <div id="scoringDanePodstawowe"></div>
         <div id="ryzykoDanePodstawowe"></div>
-        <div id="rejectionsAndWarnings"></div>
+        <div id="rejectionsAndWarnings">
+            <h1>Ostrzeżenia</h1>
+            <table id="warningsTable">
+                <thead>
+                    <tr>
+                        <th>Istotność</th>
+                        <th>ID</th>
+                        <th>Opis</th>
+                        <th>Dodatkowe dane alertu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Wyniki zostaną tutaj wstawione -->
+                </tbody>
+            </table>
+        </div>
         
         <!-- 
         Dane podstawowe
@@ -341,11 +365,15 @@
             console.log("Ryzyko: ",ryzykoDanePodstawoweTable);
             ryzykoDanePodstawoweDiv.appendChild(ryzykoDanePodstawoweTable);
 
+            /*
             const rejectionsAndWarningsDiv = document.getElementById('rejectionsAndWarnings');
             rejectionsAndWarningsDiv.innerHTML = '';
             const rejectionsAndWarningsTable = createTable(data.rejections_and_warnings);
             console.log("Ostrzezenia: ",rejectionsAndWarningsTable);
             rejectionsAndWarningsDiv.appendChild(rejectionsAndWarningsTable);
+            */
+
+            displayWarnings(data.result.rejections_and_warnings);
 
             /*
             <div id="daneRejestrowe" class="tab">
@@ -544,7 +572,7 @@
             }
           
 
-            for (const key in data.result) {
+            for (key in data.result) {
                 const sec = createCollapsibleSection(key, data.result[key]);
                 jsonViewer.appendChild(sec);
             }
@@ -552,6 +580,34 @@
                 console.log("error :", error);
             }
             
+        }
+
+        function displayWarnings(warnings) {
+            const tableBody = document.getElementById('warningsTable').getElementsByTagName('tbody');
+            warnings.sort((a, b) => b.score - a.score);
+
+            warnings.forEach(warning => {
+                const row = tableBody.insertRow();
+                row.className = getClassByScore(warning.score);
+
+                row.insertCell(0).textContent = warning.istotnosc;
+                row.insertCell(1).textContent = warning.id;
+                row.insertCell(2).textContent = warning.opis;
+                row.insertCell(3).textContent = warning.dodakowe_dane_alertu;
+            });
+        }
+
+        function getClassByScore(score) {
+            switch (score) {
+                case 3:
+                    return 'high';
+                case 2:
+                    return 'medium';
+                case 1:
+                    return 'low';
+                default:
+                    return '';
+            }
         }
 
         document.querySelectorAll('.tab-button').forEach(button => {

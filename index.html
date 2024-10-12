@@ -179,7 +179,7 @@
                 const endTime = new Date().getTime();
                 const timeTaken = (endTime - startTime) / 1000;
                 timerDiv.innerHTML = `Czas odpowiedzi: ${timeTaken} sekund`;
-                displayResults(data);
+                displayResults(data.result);
             })
             .catch(error => {
                 loader.style.display = 'none';
@@ -242,6 +242,7 @@
         }
 
         function createTable(data) {
+            console.log(data);
             const table = document.createElement('table');
             const tbody = document.createElement('tbody');
 

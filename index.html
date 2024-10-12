@@ -72,6 +72,26 @@
             100% { transform: rotate(360deg); }
 
         }
+        .json-viewer {
+            font-family: monospace;
+            white-space: pre;
+        }
+        .collapsible {
+            cursor: pointer;
+            background-color: #f2f2f2;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            width: 100%;
+        }
+        .content {
+            display: none;
+            overflow: hidden;
+        }
+        .content.show {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -195,19 +215,19 @@
             const rejectionsAndWarningsDiv = document.getElementById('rejectionsAndWarnings');
             const scoringDanePodstawoweDiv = document.getElementById('scoringDanePodstawowe');
             const raportyContentDiv = document.getElementById('raportyContent');
-            const jsonDiv = document.getElementById('json');
+            const jsonDiv = document.getElementById('jsonContent');
             
             danePodstawoweDiv.innerHTML = '';
             rejectionsAndWarningsDiv.innerHTML = '';
             scoringDanePodstawoweDiv.innerHTML = '';
             raportyContentDiv.innerHTML = '';
-            jsonDiv.innerHTML = document.getElementById('jsonContent').textContent = JSON.stringify(data, null, 2);
+            jsonDiv = displayJSON(data);
 
             const danePodstawoweTable = createTable(data.dane_podstawowe);
             console.log("Dane: ",danePodstawoweTable);
             const rejectionsAndWarningsTable = createTable(data.rejections_and_warnings);
             console.log("Ostrzezenia: ",rejectionsAndWarningsTable);
-            const scoringDanePodstawoweTable = createTable(data.raport_dane_krs);
+            const scoringDanePodstawoweTable = createTable(data.raport_dane_krs.scoring);
             console.log("Scroing: ",scoringDanePodstawoweTable);
 
             danePodstawoweDiv.appendChild(danePodstawoweTable);
@@ -257,6 +277,34 @@
 
             table.appendChild(tbody);
             return table;
+        }
+
+        function displayJSON(data) {
+            const jsonViewer = document.getElementById('jsonContent');
+            jsonViewer.innerHTML = '';
+
+            function createCollapsibleSection(key, value) {
+                const section = document.createElement('div');
+                const button = document.createElement('button');
+                button.className = 'collapsible';
+                button.textContent = key;
+                button.onclick = function() {
+                    this.nextElementSibling.classList.toggle('show');
+                };
+
+                const content = document.createElement('div');
+                content.className = 'content';
+                content.textContent = JSON.stringify(value, null, 2);
+
+                section.appendChild(button);
+                section.appendChild(content);
+                return section;
+            }
+
+            for (const key in data.result) {
+                const section = createCollapsibleSection(key, data.result[key]);
+                jsonViewer.appendChild(section);
+            }
         }
 
         document.querySelectorAll('.tab-button').forEach(button => {

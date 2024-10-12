@@ -114,6 +114,8 @@
             <label for="biala_lista_vat">Status biała lista VAT</label><br><br>
             <input type="checkbox" id="sprawozdania_fin" name="requested_reports" value="sprawozdania_fin" checked>
             <label for="sprawozdania_fin">Sprawozdania finansowe</label><br><br>
+            <input type="checkbox" id="ryzyko_platnosciowe" name="requested_reports" value="ryzyko_platnosciowe" checked>
+            <label for="ryzyko_platnosciowe">Ryzyko płatnościowe</label><br><br>
         </div>
         <div class="checkbox-column">
             <input type="checkbox" id="reprezentanci" name="requested_reports" value="reprezentanci" checked>
@@ -148,20 +150,95 @@
     <div id="timer"></div>
     <div id="response"></div>
     <div class="tab-buttons">
-        <div class="tab-button active" data-tab="dane">Dane Podstawowe i ostrzeżenia</div>
-        <div class="tab-button" data-tab="raporty">Dane szczegłówe</div>
+        <div class="tab-button active" data-tab="dane">Podsumowanie</div>
+        <div class="tab-button active" data-tab="daneRejestrowe">Dane rejestrowe</div>
+        <div class="tab-button" data-tab="CRBR">CRBR</div>
+        <div class="tab-button" data-tab="daneFinansowe">Dane finansowe</div>
+        <div class="tab-button" data-tab="SUDOP">SUDOP</div>
+        <div class="tab-button" data-tab="RAR">RAR</div>      
+        <div class="tab-button" data-tab="KRZ">KRZ</div>
+        <div class="tab-button" data-tab="weryfikacje">Weryfikacje</div>
         <div class="tab-button" data-tab="json">JSON - dane źródłowe</div>
     </div>
     <div id="dane" class="tab active">
         <div id="danePodstawowe"></div>
-        <div id="rejectionsAndWarnings"></div>
+        <div id="vatContent"></div>
+        <div id="reprezentacja"></div>
         <div id="scoringDanePodstawowe"></div>
+        <div id="ryzykoDanePodstawowe"></div>
+        <div id="rejectionsAndWarnings"></div>
+        
+        <!-- 
+        Dane podstawowe
+        Status biała lista
+        Reprezentacja - zarząd + RN
+        Scoring - wynik + wizualizacja
+        Ryzyko płatnościowe
+        <div id="daneFinansowePodstawowe"></div>
+        Podstawowe dane finansowe - tabelka przychody, koszty, wyniki finansowy za dostępne lata
+        -->
     </div>
-    <div id="raporty" class="tab">
-        <div id="raportyContent"></div>
+    <div id="daneRejestrowe" class="tab">
+        <div id="gusContent"></div>
+        <div id="ceidgContent"></div>
+        <div id="krsContent"></div>
+         <!-- 
+        GUS/REGON
+        CEIDG lub KRS
+        -->
     </div>
+    <div id="CRBR" class="tab">
+        <div id="crbrContent"></div>
+         <!-- 
+        CRBR
+        -->
+    </div>
+    <div id="daneFinansowe" class="tab">
+        <div id="finanseContent"></div>
+         <!-- 
+        Dane ze sprawozdań
+        -->
+    </div>
+    <div id="SUDOP" class="tab">
+        <div id="sudopContent"></div>
+         <!-- 
+        Dane ze SUDOP
+        -->
+    </div>
+    <div id="RAR" class="tab">
+        <div id="rarContent"></div>
+         <!-- 
+        Dane ze RAR
+        -->
+    </div>
+    <div id="KRZ" class="tab">
+        <div id="krzContent"></div>
+         <!-- 
+        Dane ze krz
+        -->
+    </div>
+    <div id="weryfikacje" class="tab">
+        <div id="adresContent"></div>
+        <div id="gieldyContent"></div>
+        <div id="listyContent"></div>
+        <div id="wwwContent"></div>
+        <div id="opinieContent"></div>
+         <!-- 
+        Weryfikacja adresu
+        Giełdy wierzytelności
+        Listy sankcyjne
+        Weryfikacja strony www
+        Weryfikacja w internecie
+        -->
+    </div>
+         <!-- 
+        JSON z szczegółową odpowiedzią
+        -->
     <div id="json" class="tab">
         <div id="jsonContent"></div>
+         <!-- 
+        JSON z szczegółową odpowiedzią
+        -->
     </div>
 
     <script type ="text/javascript">
@@ -211,39 +288,108 @@
         }
 
         function displayResults(data) {
-            const danePodstawoweDiv = document.getElementById('danePodstawowe');
-            const rejectionsAndWarningsDiv = document.getElementById('rejectionsAndWarnings');
-            const scoringDanePodstawoweDiv = document.getElementById('scoringDanePodstawowe');
-            const raportyContentDiv = document.getElementById('raportyContent');
-            const jsonDiv = document.getElementById('jsonContent');
             
-            danePodstawoweDiv.innerHTML = '';
-            rejectionsAndWarningsDiv.innerHTML = '';
-            scoringDanePodstawoweDiv.innerHTML = '';
-            raportyContentDiv.innerHTML = '';
-            try {
-                jsonDiv = displayJSON(data);
-            } catch (error) {
-                console.log("error :",error);
-            }
+           
             
+            /* 
+            Dane podstawowe, 
+            Status biała lista, 
+            Reprezentacja - zarząd + RN, 
+            Scoring - wynik + wizualizacja, 
+            Podstawowe dane finansowe - tabelka przychody, koszty, wyniki finansowy za dostępne lata
 
+            <div id="dane" class="tab active">
+            <div id="danePodstawowe"></div>
+            <div id="vatContent"></div>
+            <div id="reprezentacja"></div>
+            <div id="scoringDanePodstawowe"></div>
+            <div id="ryzykoDanePodstawowe"></div>
+            <div id="rejectionsAndWarnings"></div>
+
+            
+            <div id="daneFinansowePodstawowe"></div>
+
+            */
+            // Podsumowanie
+            const danePodstawoweDiv = document.getElementById('danePodstawowe');
+            danePodstawoweDiv.innerHTML = '';
             const danePodstawoweTable = createTable(data.dane_podstawowe);
             console.log("Dane: ",danePodstawoweTable);
-            const rejectionsAndWarningsTable = createTable(data.rejections_and_warnings);
-            console.log("Ostrzezenia: ",rejectionsAndWarningsTable);
+            danePodstawoweDiv.appendChild(danePodstawoweTable);
+
+            const vatContentDiv = document.getElementById('vatContent');
+            vatContentDiv.innerHTML = '';
+            const vatContentTable = createTable(data.raport_biala_lista_vat.owners);
+            console.log("Biała lista: ",vatContentTable);
+            vatContentDiv.appendChild(vatContentTable);
+
+            const reprezentacjaDiv = document.getElementById('reprezentacja');
+            reprezentacjaDiv.innerHTML = '';
+            const reprezentacjaTable = createTable(data.raport_reprezentanci);
+            console.log("Reprezentacja: ",reprezentacjaTable);
+            reprezentacjaDiv.appendChild(reprezentacjaTable);
+  
+            const scoringDanePodstawoweDiv = document.getElementById('scoringDanePodstawowe');
+            scoringDanePodstawoweDiv.innerHTML = '';
             const scoringDanePodstawoweTable = createTable(data.raport_dane_krs.scoring);
             console.log("Scroing: ",scoringDanePodstawoweTable);
-
-            danePodstawoweDiv.appendChild(danePodstawoweTable);
-            rejectionsAndWarningsDiv.appendChild(rejectionsAndWarningsTable);
             scoringDanePodstawoweDiv.appendChild(scoringDanePodstawoweTable);
 
+            const ryzykoDanePodstawoweDiv = document.getElementById('ryzykoDanePodstawowe');
+            rejectionsAndWarningsDiv.innerHTML = '';
+            const ryzykoDanePodstawoweTable = createTable(data.raport_ryzyko_platnosciowe);
+            console.log("Ostrzezenia: ",ryzykoDanePodstawoweTable);
+            ryzykoDanePodstawoweDiv.appendChild(ryzykoDanePodstawoweTable);
+
+            const rejectionsAndWarningsDiv = document.getElementById('rejectionsAndWarnings');
+            rejectionsAndWarningsDiv.innerHTML = '';
+            const rejectionsAndWarningsTable = createTable(data.rejections_and_warnings);
+            console.log("Ostrzezenia: ",rejectionsAndWarningsTable);
+            rejectionsAndWarningsDiv.appendChild(rejectionsAndWarningsTable);
+
+            /*
+            <div id="daneRejestrowe" class="tab">
+            <div id="gusContent"></div>
+            <div id="ceidgContent"></div>
+            <div id="krsContent"></div>
+            <!-- 
+            GUS/REGON
+            CEIDG lub KRS
+             
+            */
+           
+            // Dane rejestrowe
+            const gusContentDiv = document.getElementById('gusContent');
+            gusContentDiv.innerHTML = '';
+            const gusContentTable = createTable(data.raport_gus_regon.dane);
+            console.log("Dane: ",gusContentTable);
+            gusContentDiv.appendChild(gusContentTable);
+
+            const ceidgContentDiv = document.getElementById('ceidgContent');
+            ceidgContentDiv.innerHTML = '';
+            const ceidgContentTable = createTable(data.raport_ceidg);
+            console.log("Dane: ",ceidgContentTable);
+            ceidgContentDiv.appendChild(ceidgContentTable);
+
+            const krsContentDiv = document.getElementById('krsContent');
+            krsContentDiv.innerHTML = '';
+            const krsContentTable = createTable(data.raport_dane_KRS);
+            console.log("Dane: ",krsContentTable);
+            krsContentDiv.appendChild(krsContentTable);
+
+
+            // Dane źródłowe
+            const jsonDiv = document.getElementById('jsonContent');
+            jsonDiv = displayJSON(data, jsonDiv);
+        
+
+
+
+
+
+
+            /*
             const sections = [
-                'raport_gus_regon',
-                'raport_ceidg',
-                'raport_biala_lista_vat',
-                'raport_dane_krs',
                 'raport_sudop',
                 'raport_krz',          
                 'raport_rar',
@@ -264,7 +410,10 @@
                     raportyContentDiv.appendChild(sectionDiv);
                 }
             });
+            */
         }
+        
+        
 
         function createTable(data) {
             console.log(data);
@@ -284,9 +433,10 @@
             return table;
         }
 
-        function displayJSON(data) {
-            try {
-                const jsonViewer = document.getElementById('jsonContent');
+        function displayJSON(data,div) {
+            try{
+
+            const jsonViewer = div;
             jsonViewer.innerHTML = '';
 
             function createCollapsibleSection(key, value) {
@@ -306,6 +456,7 @@
                 section.appendChild(content);
                 return section;
             }
+          
 
             for (const key in data.result) {
                 const section = createCollapsibleSection(key, data.result[key]);

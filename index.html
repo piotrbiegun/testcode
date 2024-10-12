@@ -314,7 +314,7 @@
             const danePodstawoweDiv = document.getElementById('danePodstawowe');
             danePodstawoweDiv.innerHTML = '';
             const danePodstawoweTable = createTable(data.dane_podstawowe);
-            console.log("Dane: ",danePodstawoweTable);
+            console.log("Dane podstawowe: ",danePodstawoweTable);
             danePodstawoweDiv.appendChild(danePodstawoweTable);
 
             const vatContentDiv = document.getElementById('vatContent');
@@ -338,7 +338,7 @@
             const ryzykoDanePodstawoweDiv = document.getElementById('ryzykoDanePodstawowe');
             ryzykoDanePodstawoweDiv.innerHTML = '';
             const ryzykoDanePodstawoweTable = createTable(data.raport_ryzyko_platnosciowe);
-            console.log("Ostrzezenia: ",ryzykoDanePodstawoweTable);
+            console.log("Ryzyko: ",ryzykoDanePodstawoweTable);
             ryzykoDanePodstawoweDiv.appendChild(ryzykoDanePodstawoweTable);
 
             const rejectionsAndWarningsDiv = document.getElementById('rejectionsAndWarnings');
@@ -362,21 +362,21 @@
             const gusContentDiv = document.getElementById('gusContent');
             gusContentDiv.innerHTML = '';
             const gusContentTable = createTable(data.raport_gus_regon.dane);
-            console.log("Dane: ",gusContentTable);
+            console.log("GUS/Regon: ",gusContentTable);
             gusContentDiv.appendChild(gusContentTable);
 
-            /*
+            
             const ceidgContentDiv = document.getElementById('ceidgContent');
             ceidgContentDiv.innerHTML = '';
             const ceidgContentTable = createTable(data.raport_ceidg);
-            console.log("Dane: ",ceidgContentTable);
+            console.log("CEIDG: ",ceidgContentTable);
             ceidgContentDiv.appendChild(ceidgContentTable);
-            */
+            
 
             const krsContentDiv = document.getElementById('krsContent');
             krsContentDiv.innerHTML = '';
             const krsContentTable = createTable(data.raport_dane_krs);
-            console.log("Dane: ",krsContentTable);
+            console.log("KRS: ",krsContentTable);
             krsContentDiv.appendChild(krsContentTable);
 
 
@@ -392,7 +392,7 @@
             const sudopContentDiv = document.getElementById('sudopContent');
             sudopContentDiv.innerHTML = '';
             const sudopContentTable = createTable(data.raport_sudop);
-            console.log("Dane: ",sudopContentTable);
+            console.log("SUDOP: ",sudopContentTable);
             sudopContentDiv.appendChild(sudopContentTable);
         
             /*
@@ -405,7 +405,7 @@
             const rarContentDiv = document.getElementById('rarContent');
             rarContentDiv.innerHTML = '';
             const rarContentTable = createTable(data.raport_rar);
-            console.log("Dane: ",rarContentTable);
+            console.log("RAR: ",rarContentTable);
             rarContentDiv.appendChild(rarContentTable);
         
             /*
@@ -417,7 +417,7 @@
             const krzContentDiv = document.getElementById('krzContent');
             krzContentDiv.innerHTML = '';
             const krzContentTable = createTable(data.raport_krz);
-            console.log("Dane: ",krzContentTable);
+            console.log("KRZ: ",krzContentTable);
             krzContentDiv.appendChild(krzContentTable);
         
 
@@ -441,31 +441,31 @@
             const adresContentDiv = document.getElementById('adresContent');
             adresContentDiv.innerHTML = '';
             const adresContentTable = createTable(data.weryfikacja_adresu);
-            console.log("Dane: ",adresContentTable);
+            console.log("Weryfikacja adres: ",adresContentTable);
             adresContentDiv.appendChild(adresContentTable);
             
             const gieldyContentDiv = document.getElementById('gieldyContent');
             gieldyContentDiv.innerHTML = '';
             const gieldyContentTable = createTable(data.raport_gieldy_wierzytelnosci);
-            console.log("Dane: ",gieldyContentTable);
+            console.log("Giełdy długów: ",gieldyContentTable);
             gieldyContentDiv.appendChild(gieldyContentTable);
 
             const listyContentDiv = document.getElementById('listyContent');
             listyContentDiv.innerHTML = '';
             const listyContentTable = createTable(data.raport_listy_sankcyjne);
-            console.log("Dane: ",listyContentTable);
+            console.log("Listy sankcyjne: ",listyContentTable);
             listyContentDiv.appendChild(listyContentTable);
 
             const wwwContentDiv = document.getElementById('wwwContent');
             wwwContentDiv.innerHTML = '';
             const wwwContentTable = createTable(data.raport_weryfikacja_strony_www);
-            console.log("Dane: ",wwwContentTable);
+            console.log("Weryfikacja strona www: ",wwwContentTable);
             wwwContentDiv.appendChild(wwwContentTable);
 
             const opinieContentDiv = document.getElementById('opinieContent');
             opinieContentDiv.innerHTML = '';
             const opinieContentTable = createTable(data.raport_weryfikacja_w_internecie);
-            console.log("Dane: ",opinieContentTable);
+            console.log("Weryfikacja opinie w Internecie: ",opinieContentTable);
             opinieContentDiv.appendChild(opinieContentTable);
 
             // Dane źródłowe
@@ -501,7 +501,6 @@
         
 
         function createTable(data) {
-            console.log(data);
             const table = document.createElement('table');
             const tbody = document.createElement('tbody');
 
@@ -524,6 +523,8 @@
             const jsonViewer = div;
             jsonViewer.innerHTML = '';
 
+            console.log(div," Dane: ",data.result)
+
             function createCollapsibleSection(key, value) {
                 const section = document.createElement('div');
                 const but = document.createElement('button');
@@ -537,7 +538,7 @@
                 content.className = 'content';
                 content.textContent = JSON.stringify(value, null, 2);
 
-                section.appendChild(button);
+                section.appendChild(but);
                 section.appendChild(content);
                 return section;
             }

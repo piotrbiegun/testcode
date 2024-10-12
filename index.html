@@ -285,7 +285,8 @@
         }
 
         function displayJSON(data) {
-            const jsonViewer = document.getElementById('jsonContent');
+            try {
+                const jsonViewer = document.getElementById('jsonContent');
             jsonViewer.innerHTML = '';
 
             function createCollapsibleSection(key, value) {
@@ -310,6 +311,10 @@
                 const section = createCollapsibleSection(key, data.result[key]);
                 jsonViewer.appendChild(section);
             }
+            } catch (error) {
+                console.log("error :",error);
+            }
+            
         }
 
         document.querySelectorAll('.tab-button').forEach(button => {

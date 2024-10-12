@@ -81,7 +81,7 @@
         
         <label for="nip">NIP:</label><br>
         <input type="text" id="nip" name="nip" value="9462662680"><br><br>
-        <!-- 9462662680 --> >
+        <!-- 9462662680 -->
         <label>Requested Reports:</label><br>
         <div class="checkbox-column">
             <input type="checkbox" id="gus_regon" name="requested_reports" value="gus_regon" checked>
@@ -247,6 +247,7 @@
                 const cell2 = row.insertCell(1);
                 cell1.textContent = key;
                 cell2.textContent = JSON.stringify(data[key]);
+                console.log(key,": ",JSON.stringify(data[key]))
             }
 
             table.appendChild(tbody);

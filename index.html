@@ -365,11 +365,13 @@
             console.log("Dane: ",gusContentTable);
             gusContentDiv.appendChild(gusContentTable);
 
+            /*
             const ceidgContentDiv = document.getElementById('ceidgContent');
             ceidgContentDiv.innerHTML = '';
             const ceidgContentTable = createTable(data.raport_ceidg);
             console.log("Dane: ",ceidgContentTable);
             ceidgContentDiv.appendChild(ceidgContentTable);
+            */
 
             const krsContentDiv = document.getElementById('krsContent');
             krsContentDiv.innerHTML = '';
@@ -438,7 +440,7 @@
             // Weryfikacje
             const adresContentDiv = document.getElementById('adresContent');
             adresContentDiv.innerHTML = '';
-            const adresContentTable = createTable(data.raport_krz);
+            const adresContentTable = createTable(data.weryfikacja_adresu);
             console.log("Dane: ",adresContentTable);
             adresContentDiv.appendChild(adresContentTable);
             
@@ -466,17 +468,9 @@
             console.log("Dane: ",opinieContentTable);
             opinieContentDiv.appendChild(opinieContentTable);
 
-
-
-
             // Dane źródłowe
-            //const jsonDiv = document.getElementById('jsonContent');
-            //jsonDiv = displayJSON(data, jsonDiv);
-        
-
-
-
-
+            const jsonDiv = document.getElementById('jsonContent');
+            jsonDiv = displayJSON(data, jsonDiv);
 
 
             /*

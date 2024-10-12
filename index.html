@@ -5,6 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formularz Zapytania</title>
     <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .collapsible {
+            cursor: pointer;
+            background-color: #f2f2f2;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            width: 100%;
+        }
+        .content {
+            display: none;
+            overflow: hidden;
+        }
+        .content.show {
+            display: table-row-group;
+        }
+
         .checkbox-column {
             display: inline-block;
             vertical-align: top;
@@ -22,6 +51,7 @@
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+
         }
     </style>
 </head>
@@ -111,7 +141,7 @@
             .then(response => response.json())
             .then(data => {
                 loader.style.display = 'none';
-                responseDiv.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                displayResults(data.result);
                 const endTime = new Date().getTime();
                 const timeTaken = (endTime - startTime) / 1000;
                 timerDiv.innerHTML = `Czas odpowiedzi: ${timeTaken} sekund`;
@@ -124,6 +154,62 @@
                 timerDiv.innerHTML = `Czas odpowiedzi: ${timeTaken} sekund`;
             });
         }
+
+        function displayResults(result) {
+            const responseDiv = document.getElementById('responseDiv');
+            responseDiv.innerHTML = '';
+
+            const sections = [
+                'dane_podstawowe',
+                'rejections_and_warnings',
+                'raport_gus_regon',
+                'raport_sudop',
+                'raport_biala_lista_vat',
+                'raport_krz',
+                'raport_ceidg',
+                'raport_rar',
+                'raport_gieldy_wierzytelnosci',
+                'raport_weryfikacja_strony_www',
+                'raport_weryfikacja_w_internecie',
+                'raport_listy_sankcyjne',
+                'raport_dane_krs',
+                'raport_powiazania'
+            ];
+
+            sections.forEach(section => {
+                const button = document.createElement('button');
+                button.className = 'collapsible';
+                button.textContent = section;
+                button.onclick = function() {
+                    this.nextElementSibling.classList.toggle('show');
+                };
+
+                const content = document.createElement('div');
+                content.className = 'content';
+                if (section === 'dane_podstawowe' || section === 'rejections_and_warnings') {
+                    content.classList.add('show');
+                }
+
+                const table = document.createElement('table');
+                const tbody = document.createElement('tbody');
+
+                if (result[section]) {
+                    for (const key in result[section]) {
+                        const row = tbody.insertRow();
+                        const cell1 = row.insertCell(0);
+                        const cell2 = row.insertCell(1);
+                        cell1.textContent = key;
+                        cell2.textContent = JSON.stringify(result[section][key]);
+                    }
+                }
+
+                table.appendChild(tbody);
+                content.appendChild(table);
+                responseDiv.appendChild(button);
+                responseDiv.appendChild(content);
+            });
+        }
+
     </script>
 </body>
 </html>

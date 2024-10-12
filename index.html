@@ -523,7 +523,7 @@
             const jsonViewer = div;
             jsonViewer.innerHTML = '';
 
-            console.log(div," Dane: ",data.result)
+            console.log(data.result)
 
             function createCollapsibleSection(key, value) {
                 const section = document.createElement('div');
@@ -545,8 +545,8 @@
           
 
             for (const key in data.result) {
-                const section = createCollapsibleSection(key, data.result[key]);
-                jsonViewer.appendChild(section);
+                const sec = createCollapsibleSection(key, data.result[key]);
+                jsonViewer.appendChild(sec);
             }
             } catch (error) {
                 console.log("error :", error);

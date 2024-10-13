@@ -322,7 +322,7 @@
                 const endTime = new Date().getTime();
                 const timeTaken = (endTime - startTime) / 1000;
                 timerDiv.innerHTML = `Czas odpowiedzi: ${timeTaken} sekund`;
-                responseDiv.innerHTML = `Błąd: ${error}`;
+                responseDiv.innerHTML = `Błąd: ${error}. Linia błędu: ${error.lineNumber}`;
             });
         }
 

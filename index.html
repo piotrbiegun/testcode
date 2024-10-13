@@ -186,7 +186,7 @@
                         <th>Dodatkowe dane alertu</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="tbody.warningsTable">
                     <!-- Wyniki zostaną tutaj wstawione -->
                 </tbody>
             </table>
@@ -531,7 +531,7 @@
 
         function displayWarnings(warnings) {
             const tableBody = document.getElementById('warningsTable').getElementsByTagName('tbody');
-            console.log(tableBody);
+            console.log("tabela: ",tableBody);
             warnings.sort((a, b) => b.score - a.score);
 
             warnings.forEach(warning => {
@@ -613,7 +613,7 @@
         }
 
         function displayWarnings(warnings) {
-            var tableBody = document.getElementById('warningsTable').getElementsByTagName('tbody');
+            var tableBody = document.getElementById('tbody.warningsTable');
             warnings.sort((a, b) => b.score - a.score);
             console.log(warnings);
 

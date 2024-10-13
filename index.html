@@ -628,7 +628,7 @@
             var jsonViewer = div;
             jsonViewer.innerHTML = '';
 
-            console.log(data.result)
+            console.log("JSON ",data.result)
 
             function createCollapsibleSection(key, value) {
                 var section = document.createElement('div');
@@ -657,34 +657,6 @@
                 console.log("error :", error);
             }
             
-        }
-
-        function displayWarnings(warnings) {
-            var tableBody = document.getElementById('tbody.warningsTable');
-            warnings.sort((a, b) => b.score - a.score);
-
-            warnings.forEach(warning => {
-                var row = tableBody.insertRow();
-                row.className = getClassByScore(warning.score);
-
-                row.insertCell(0).textContent = warning.istotnosc;
-                row.insertCell(1).textContent = warning.id;
-                row.insertCell(2).textContent = warning.opis;
-                row.insertCell(3).textContent = warning.dodakowe_dane_alertu;
-            });
-        }
-
-        function getClassByScore(score) {
-            switch (score) {
-                case 3:
-                    return 'high';
-                case 2:
-                    return 'medium';
-                case 1:
-                    return 'low';
-                default:
-                    return '';
-            }
         }
 
         document.querySelectorAll('.tab-button').forEach(button => {

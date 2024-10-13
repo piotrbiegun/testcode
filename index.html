@@ -372,8 +372,10 @@
             console.log("Ostrzezenia: ",rejectionsAndWarningsTable);
             rejectionsAndWarningsDiv.appendChild(rejectionsAndWarningsTable);
             */
-
-            displayWarnings(data.result.rejections_and_warnings);
+            const rejectionsAndWarningsDiv = document.getElementById('rejectionsAndWarnings');
+            rejectionsAndWarningsDiv.innerHTML = '';
+            rejectionsAndWarningsDiv.appendChild(displayWarnings(data.result.rejections_and_warnings));
+            ;
 
             /*
             <div id="daneRejestrowe" class="tab">
@@ -526,7 +528,35 @@
             */
         }
         
-        
+    
+
+        function displayWarnings(warnings) {
+            const tableBody = document.getElementById('warningsTable').getElementsByTagName('tbody');
+            warnings.sort((a, b) => b.score - a.score);
+
+            warnings.forEach(warning => {
+                const row = tableBody.insertRow();
+                row.className = getClassByScore(warning.score);
+
+                row.insertCell(0).textContent = warning.istotnosc;
+                row.insertCell(1).textContent = warning.id;
+                row.insertCell(2).textContent = warning.opis;
+                row.insertCell(3).textContent = warning.dodakowe_dane_alertu;
+            });
+        }
+
+        function getClassByScore(score) {
+            switch (score) {
+                case 3:
+                    return 'high';
+                case 2:
+                    return 'medium';
+                case 1:
+                    return 'low';
+                default:
+                    return '';
+            }
+        }
 
         function createTable(data) {
             const table = document.createElement('table');

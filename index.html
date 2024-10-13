@@ -372,9 +372,8 @@
             console.log("Ostrzezenia: ",rejectionsAndWarningsTable);
             rejectionsAndWarningsDiv.appendChild(rejectionsAndWarningsTable);
             */
-            const rejectionsAndWarningsDiv = document.getElementById('rejectionsAndWarnings');
-            rejectionsAndWarningsDiv.innerHTML = '';
-            rejectionsAndWarningsDiv.appendChild(displayWarnings(data.result.rejections_and_warnings));
+            
+            displayWarnings(data.rejections_and_warnings);
             ;
 
             /*

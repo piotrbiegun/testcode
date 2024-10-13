@@ -614,7 +614,7 @@
         function displayWarnings(warnings) {
             var tableBody = document.getElementById('warningsTable').getElementsByTagName('tbody');
             warnings.sort((a, b) => b.score - a.score);
-            consol.log(warnings);
+            console.log(warnings);
 
             warnings.forEach(warning => {
                 var row = tableBody.insertRow();

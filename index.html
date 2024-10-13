@@ -224,7 +224,22 @@
         -->
     </div>
     <div id="SUDOP" class="tab">
+        <h1>Ostrzeżenia SUDOP</h1>
+        <table id="SUDOPwarningsTable">
+            <thead>
+                <tr>
+                    <th>Istotność</th>
+                    <th>ID</th>
+                    <th>Opis</th>
+                    <th>Dodatkowe dane alertu</th>
+                    </tr>
+            </thead>
+            <tbody id="tbody.SUDOPwarningsTable">
+                    <!-- Wyniki zostaną tutaj wstawione -->
+            </tbody>
+        </table>
         <div id="sudopContent"></div>
+            
          <!-- 
         Dane ze SUDOP
         -->
@@ -373,7 +388,7 @@
             rejectionsAndWarningsDiv.appendChild(rejectionsAndWarningsTable);
             */
             
-            displayWarnings(data.rejections_and_warnings);
+            displayWarnings(data.rejections_and_warnings,tbody.warningsTable);
             ;
 
             /*
@@ -418,11 +433,16 @@
             */
 
             // Dane SUDOP
+            /*
             const sudopContentDiv = document.getElementById('sudopContent');
             sudopContentDiv.innerHTML = '';
             const sudopContentTable = createTable(data.raport_sudop);
             console.log("SUDOP: ",sudopContentTable);
             sudopContentDiv.appendChild(sudopContentTable);
+            */
+
+            displaySUDOP(data.rejections_and_warnings);
+
         
             /*
             <div id="RAR" class="tab">
@@ -526,16 +546,43 @@
             });
             */
         }
-        
-    
 
-        function displayWarnings(warnings) {
-            const tableBody = document.getElementById('warningsTable').getElementsByTagName('tbody');
-            console.log("tabela: ",tableBody);
+
+        function displaySUDOP(sudop){
+
+            displayWarnings(sudop.rejections_and_warnings,tbody.SUDOPwarningsTable);
+
+            const sudopContentDiv = document.getElementById('sudopContent');
+            sudopContentDiv.innerHTML = '';
+            const table = document.createElement('table');
+            const tbody = document.createElement('tbody');
+
+            sudop.sort((a, b) =>Date(b.dzien-udzielenia-pomocy) - Date(a.dzien-udzielenia-pomocy));
+
+
+            sudop.forEach(warning => {
+                var row = tbody.insertRow();
+
+                row.insertCell(0).textContent = sudop.data.dzien-udzielenia-pomocy;
+                row.insertCell(1).textContent = sudop.data.nazwa-udzielajacego-pomocy," (NIP:",sudop.data.nip-udzielajacego-pomocy,")";
+                row.insertCell(2).textContent = sudop.data.forma-pomocy-nazwa;
+                row.insertCell(3).textContent = sudop.data.przeznaczenie-pomocy-nazwa;
+                row.insertCell(4).textContent = sudop.data.wartosc-brutto-pln;
+                row.insertCell(5).textContent = sudop.data.wartosc-nominalna-pln;
+
+            });
+            console.log("SUDOP: ",sudopContentTable);
+            table.appendChild(tbody);
+            sudopContentDiv.appendChild(table);
+            
+        }
+
+        function displayWarnings(warnings,div) {
+            var tableBody = document.getElementById(div);
             warnings.sort((a, b) => b.score - a.score);
 
             warnings.forEach(warning => {
-                const row = tableBody.insertRow();
+                var row = tableBody.insertRow();
                 row.className = getClassByScore(warning.score);
 
                 row.insertCell(0).textContent = warning.istotnosc;
@@ -615,7 +662,6 @@
         function displayWarnings(warnings) {
             var tableBody = document.getElementById('tbody.warningsTable');
             warnings.sort((a, b) => b.score - a.score);
-            console.log(warnings);
 
             warnings.forEach(warning => {
                 var row = tableBody.insertRow();

@@ -577,21 +577,21 @@
         function displayJSON(data,div) {
             try{
 
-            const jsonViewer = div;
+            var jsonViewer = div;
             jsonViewer.innerHTML = '';
 
             console.log(data.result)
 
             function createCollapsibleSection(key, value) {
-                const section = document.createElement('div');
-                const but = document.createElement('button');
+                var section = document.createElement('div');
+                var but = document.createElement('button');
                 but.className = 'collapsible';
                 but.textContent = key;
                 but.onclick = function() {
                     this.nextElementSibling.classList.toggle('show');
                 };
 
-                const content = document.createElement('div');
+                var content = document.createElement('div');
                 content.className = 'content';
                 content.textContent = JSON.stringify(value, null, 2);
 
@@ -602,7 +602,7 @@
           
 
             for (key in data.result) {
-                const sec = createCollapsibleSection(key, data.result[key]);
+                var sec = createCollapsibleSection(key, data.result[key]);
                 jsonViewer.appendChild(sec);
             }
             } catch (error) {
@@ -612,11 +612,12 @@
         }
 
         function displayWarnings(warnings) {
-            const tableBody = document.getElementById('warningsTable').getElementsByTagName('tbody');
+            var tableBody = document.getElementById('warningsTable').getElementsByTagName('tbody');
             warnings.sort((a, b) => b.score - a.score);
+            consol.log(warnings);
 
             warnings.forEach(warning => {
-                const row = tableBody.insertRow();
+                var row = tableBody.insertRow();
                 row.className = getClassByScore(warning.score);
 
                 row.insertCell(0).textContent = warning.istotnosc;

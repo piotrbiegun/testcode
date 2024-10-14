@@ -180,6 +180,7 @@
             <table id="warningsTable">
                 <thead>
                     <tr>
+                        <th>Akcja</th>
                         <th>Istotność</th>
                         <th>ID</th>
                         <th>Opis</th>
@@ -228,6 +229,7 @@
         <table id="SUDOPwarningsTable">
             <thead>
                 <tr>
+                    <th>Akcja</th>
                     <th>Istotność</th>
                     <th>ID</th>
                     <th>Opis</th>
@@ -562,15 +564,15 @@
             sudop.sort((a, b) =>Date(b.dzien-udzielenia-pomocy) - Date(a.dzien-udzielenia-pomocy));
 
 
-            sudop.forEach(sudop => {
+            sudop.forEach(sud => {
                 var row = tbody.insertRow();
 
-                row.insertCell(0).textContent = sudop.dzien-udzielenia-pomocy;
-                row.insertCell(1).textContent = sudop.nazwa-udzielajacego-pomocy," (NIP:",sudop.data.nip-udzielajacego-pomocy,")";
-                row.insertCell(2).textContent = sudop.forma-pomocy-nazwa;
-                row.insertCell(3).textContent = sudop.przeznaczenie-pomocy-nazwa;
-                row.insertCell(4).textContent = sudop.wartosc-brutto-pln;
-                row.insertCell(5).textContent = sudop.wartosc-nominalna-pln;
+                row.insertCell(0).textContent = sud.dzien-udzielenia-pomocy;
+                row.insertCell(1).textContent = sud.nazwa-udzielajacego-pomocy," (NIP:",sudop.data.nip-udzielajacego-pomocy,")";
+                row.insertCell(2).textContent = sud.forma-pomocy-nazwa;
+                row.insertCell(3).textContent = sud.przeznaczenie-pomocy-nazwa;
+                row.insertCell(4).textContent = sud.wartosc-brutto-pln;
+                row.insertCell(5).textContent = sud.wartosc-nominalna-pln;
 
             });
             console.log("SUDOP: ",sudopContentTable);
@@ -588,6 +590,7 @@
                 var row = tableBody.insertRow();
                 row.className = getClassByScore(warning.score);
 
+                row.insertCell(0).textContent = warning.akcja;
                 row.insertCell(0).textContent = warning.istotnosc;
                 row.insertCell(1).textContent = warning.id;
                 row.insertCell(2).textContent = warning.opis;

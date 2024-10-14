@@ -559,15 +559,11 @@
             const table = document.createElement('table');
             const tbody = document.createElement('tbody');
 
-            console.log(sudop_raport.data);
-            var sudop = [];
-            sudop.push(sudop_raport.data);
-       
-
-            sudop.sort((a, b) =>Date(b.dzien-udzielenia-pomocy) - Date(a.dzien-udzielenia-pomocy));
+    
+            sudop_raport.data.sort((a, b) =>Date(sudop_raport.data.dzien-udzielenia-pomocy) - Date(sudop_raport.data.dzien-udzielenia-pomocy));
 
 
-            sudop.forEach(sud => {
+            sudop_raport.data.forEach(sud => {
                 var row = tbody.insertRow();
 
                 row.insertCell(0).textContent = sud.dzien-udzielenia-pomocy;

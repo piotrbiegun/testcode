@@ -559,11 +559,11 @@
             const table = document.createElement('table');
             const tbody = document.createElement('tbody');
 
-            console.log(sudop_raport);
+            console.log(sudop_raport.data);
             const sudop =sudop_raport.data;
        
 
-            //sudop.sort((a, b) =>Date(b.dzien-udzielenia-pomocy) - Date(a.dzien-udzielenia-pomocy));
+            sudop.sort((a, b) =>Date(b.dzien-udzielenia-pomocy) - Date(a.dzien-udzielenia-pomocy));
 
 
             sudop.forEach(sud => {
@@ -593,10 +593,10 @@
                 row.className = getClassByScore(warning.score);
 
                 row.insertCell(0).textContent = warning.akcja;
-                row.insertCell(0).textContent = warning.istotnosc;
-                row.insertCell(1).textContent = warning.id;
-                row.insertCell(2).textContent = warning.opis;
-                row.insertCell(3).textContent = warning.dodakowe_dane_alertu;
+                row.insertCell(1).textContent = warning.istotnosc;
+                row.insertCell(2).textContent = warning.id;
+                row.insertCell(3).textContent = warning.opis;
+                row.insertCell(4).textContent = warning.dodakowe_dane_alertu;
             });
         }
 

@@ -560,7 +560,7 @@
             //sudop.data.sort((a, b) =>Date(b.dzien-udzielenia-pomocy) - Date(a.dzien-udzielenia-pomocy));
 
 
-            sudop.forEach(warning => {
+            sudop.forEach(sudop => {
                 var row = tbody.insertRow();
 
                 row.insertCell(0).textContent = sudop.data.dzien-udzielenia-pomocy;

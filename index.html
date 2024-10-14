@@ -548,27 +548,29 @@
         }
 
 
-        function displaySUDOP(sudop){
-
-            displayWarnings(sudop.rejections_and_warnings,"tbody.SUDOPwarningsTable");
+        function displaySUDOP(sudop_raport){
+            
+            displayWarnings(sudop_raport.rejections_and_warnings,"tbody.SUDOPwarningsTable");
 
             const sudopContentDiv = document.getElementById('sudopContent');
             sudopContentDiv.innerHTML = '';
             const table = document.createElement('table');
             const tbody = document.createElement('tbody');
 
-            //sudop.data.sort((a, b) =>Date(b.dzien-udzielenia-pomocy) - Date(a.dzien-udzielenia-pomocy));
+            const sudop =sudop_raport.data;
+
+            sudop.sort((a, b) =>Date(b.dzien-udzielenia-pomocy) - Date(a.dzien-udzielenia-pomocy));
 
 
             sudop.forEach(sudop => {
                 var row = tbody.insertRow();
 
-                row.insertCell(0).textContent = sudop.data.dzien-udzielenia-pomocy;
-                row.insertCell(1).textContent = sudop.data.nazwa-udzielajacego-pomocy," (NIP:",sudop.data.nip-udzielajacego-pomocy,")";
-                row.insertCell(2).textContent = sudop.data.forma-pomocy-nazwa;
-                row.insertCell(3).textContent = sudop.data.przeznaczenie-pomocy-nazwa;
-                row.insertCell(4).textContent = sudop.data.wartosc-brutto-pln;
-                row.insertCell(5).textContent = sudop.data.wartosc-nominalna-pln;
+                row.insertCell(0).textContent = sudop.dzien-udzielenia-pomocy;
+                row.insertCell(1).textContent = sudop.nazwa-udzielajacego-pomocy," (NIP:",sudop.data.nip-udzielajacego-pomocy,")";
+                row.insertCell(2).textContent = sudop.forma-pomocy-nazwa;
+                row.insertCell(3).textContent = sudop.przeznaczenie-pomocy-nazwa;
+                row.insertCell(4).textContent = sudop.wartosc-brutto-pln;
+                row.insertCell(5).textContent = sudop.wartosc-nominalna-pln;
 
             });
             console.log("SUDOP: ",sudopContentTable);
